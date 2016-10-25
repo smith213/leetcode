@@ -26,7 +26,7 @@ iterative solution£º
  * }
  */
 public class Solution {
-    public boolean isSymmetric(TreeNode root) {
+    public boolean isSymmetric(TreeNode root) {//iterative solution
         Queue<TreeNode> queue = new LinkedList<TreeNode>();
         if(root==null) return true;
         queue.offer(root.left);
@@ -43,6 +43,19 @@ public class Solution {
             queue.add(right.left);  
         }
         return true;
+    }
+
+    public boolean isSymmetric(TreeNode root) {//recursive solution
+        if(root==null) return true;
+        return isChildSymmetric(root.left,root.right);
+    }
+    boolean isChildSymmetric(TreeNode leftChild,TreeNode rightChild){
+        if(leftChild==null^rightChild==null) return false;
+        else if(leftChild==null&&rightChild==null) return true;
+        else{
+            if(leftChild.val == rightChild.val) return isChildSymmetric(leftChild.right,rightChild.left)&&isChildSymmetric(leftChild.left,rightChild.right);
+            else return false;
+        }
     }
 }
 
