@@ -1,0 +1,55 @@
+Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
+
+For example:
+Given the below binary tree and sum = 22,
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+return
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> list = new ArrayList<List<Integer>>();
+        List<Integer> li = new ArrayList<Integer>();
+        findAllPaths(root,sum,li,list);
+        return list;
+    }
+    void findAllPaths(TreeNode root,int nowDif,List<Integer> li,List<List<Integer>> list){
+        if(root == null) return;
+        if(root.left == null && root.right == null){
+            if(nowDif == root.val){
+                li.add(root.val);
+                List<Integer> tmp = new ArrayList<Integer>();
+                tmp.addAll(li);
+                list.add(tmp);
+                //list.add(li);//直接加li，当li值改变后list中对应元素的值也变了
+            }else return;
+        }else{
+            // if(nowDif-root.val<0) return;
+            li.add(root.val);
+            int start = li.size();
+            findAllPaths(root.left,nowDif-root.val,li,list);
+            int end = li.size();
+            li.subList(start,end).clear();//清除新加入的数
+            findAllPaths(root.right,nowDif-root.val,li,list);
+        }
+    }
+}
