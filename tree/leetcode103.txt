@@ -1,0 +1,43 @@
+Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+
+For example:
+Given binary tree [3,9,20,null,null,15,7],
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its zigzag level order traversal as:
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {//用队列会超时（亲测），所以只能递归
+        List<List<Integer>> li = new ArrayList<List<Integer>>();
+        traversal(li,0,root);
+        for(int i = 0;i<li.size();i++){//遍历完后反转需要反转的list
+            if(i%2!=0) Collections.reverse(li.get(i));
+        }
+        return li;
+    }
+    
+    void traversal(List<List<Integer>> res,int height,TreeNode root){//不能在遍历时反转遍历（因为可能导致下一层的顺序改变），在遍历完后反转list
+        if(root==null) return;
+        if(height>=res.size()) res.add(new ArrayList<Integer>());
+        res.get(height).add(root.val);
+        traversal(res,height+1,root.left);
+        traversal(res,height+1,root.right);
+    }
+}
