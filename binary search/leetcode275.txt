@@ -1,0 +1,26 @@
+Follow up for H-Index: What if the citations array is sorted in ascending order? Could you optimize your algorithm?
+
+Hint:
+
+Expected runtime complexity is in O(log n) and the input is sorted.
+
+public class Solution {
+    public int hIndex(int[] citations) {//the array is already sorted
+        int start = 0,end = citations.length,mid = 0,result = 0,size = citations.length;
+        while(start < end){
+            mid = (end-start)/2+start;
+            if(citations[mid] == size-mid){
+                result = size-mid;
+                start = mid+1;
+            }
+            else if(citations[mid] < size-mid) start = mid+1;
+            else{
+                if(result < size-mid) {
+                    result = size - mid;
+                }
+                end = mid;//not mid-1 to avoid condition like [11,15]
+            }
+        }
+        return result;
+    }
+}

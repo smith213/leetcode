@@ -1,0 +1,46 @@
+Given two arrays, write a function to compute their intersection.
+
+Example:
+Given nums1 = [1, 2, 2, 1], nums2 = [2, 2], return [2, 2].
+
+Note:
+Each element in the result should appear as many times as it shows in both arrays.
+The result can be in any order.
+
+
+public class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        Map<Integer,Integer> map = new HashMap<>();
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int i=0,j=0,size=0;
+        while(i<nums1.length&&j<nums2.length){
+            while(j<nums2.length&&i<nums1.length&&nums1[i]<nums2[j])i++;
+            while(i<nums1.length&&j<nums2.length&&nums1[i]==nums2[j]){
+                map.put(nums1[i],map.get(nums1[i]) == null?1:map.get(nums1[i])+1);
+                i++;
+                j++;
+                size++;
+            }
+            while(i<nums1.length&&j<nums2.length&&nums1[i]>nums2[j])j++;
+            while(i<nums1.length&&j<nums2.length&&nums1[i]==nums2[j]){
+                map.put(nums1[i],map.get(nums1[i]) == null?1:map.get(nums1[i])+1);
+                i++;
+                j++;
+                size++;
+            }
+        }
+        int[] result = new int[size];
+        int l=0;
+        Iterator iter = map.entrySet().iterator();
+        while(iter.hasNext()){
+            Map.Entry entry = (Map.Entry) iter.next();
+            int key = (int)entry.getKey();
+            int val = (int)entry.getValue();
+            for(int k = 0;k < val;k++){
+                result[l++] = key;
+            }
+        }
+        return result;
+    }
+}
