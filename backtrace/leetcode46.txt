@@ -1,0 +1,36 @@
+Given a collection of distinct numbers, return all possible permutations.
+
+For example,
+[1,2,3] have the following permutations:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+
+public class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        int length = nums.length;
+        boolean[] status = new boolean[length];//java自动初始化全为false
+        generator(result,new ArrayList<>(),0,length,nums,status);
+        return result;
+    }
+    void generator(List<List<Integer>> list,List<Integer> selected,int step,int max,int[] nums,boolean[] status){//回溯法就是先确定某一部step的选择，选择之后要置状态为1，以表示某个资源已被使用；然后把“选择”和当前状态传到到step+1，直到第N+1步，才结束。然后回溯回去的时候，要重新置状态为0，这一点是回溯法的重要标志！
+        if(step == max) list.add(new ArrayList<>(selected));
+        else{
+            for(int i = 0;i < nums.length;i++){
+                if(!status[i]){
+                    status[i] = true;
+                    selected.add(nums[i]);
+                    generator(list,new ArrayList<>(selected),step+1,max,nums,status);
+                    selected.remove(selected.size()-1);
+                    status[i] = false;
+                }
+            }
+        }
+    }
+}

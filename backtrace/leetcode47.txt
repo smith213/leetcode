@@ -1,0 +1,37 @@
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+For example,
+[1,1,2] have the following unique permutations:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+
+public class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        int length = nums.length;
+        boolean[] status = new boolean[length];
+        generator(result,new ArrayList<>(),nums,status,0,length);
+        return result;
+    }
+    void generator(List<List<Integer>> list,List<Integer> selected,int[] nums,boolean[] status,int step,int max){
+        if(step == max) list.add(selected);
+        else{
+            for(int i = 0;i < max;i++){
+                if(!status[i]){
+                    if(i>0&&nums[i]==nums[i-1]&&status[i-1]) continue;//avoid duplication
+                    //(之所以能去重，是因为每次都排除掉了前面的情况，即如果第一个加入的不是一串重复数的最后一个，会导致它之后相邻的重复
+                    //数无法加入，最后由于数组的长度不够没有加入到最终结果，只有遵循从后往前的顺序加入重复数的数组才会被加入到结果中)
+                    selected.add(nums[i]);
+                    status[i] = true;
+                    generator(list,new ArrayList<>(selected),nums,status,step+1,max);
+                    status[i] = false;
+                    selected.remove(selected.size()-1);
+                }
+            }
+        }
+    }
+}
