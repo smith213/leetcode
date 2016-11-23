@@ -1,0 +1,44 @@
+Given a singly linked list, determine if it is a palindrome.
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public boolean isPalindrome(ListNode head) {//find middle(same time reverse the first half)->compare
+        if(head == null) return true;
+        ListNode middle = head;
+        ListNode end = head;
+        ListNode pre = null;
+        ListNode tmp = null;
+        
+        while(middle != null && end != null){
+            if(end.next!=null) end = end.next.next;
+            else break;
+            tmp = middle;
+            middle = middle.next;
+            tmp.next = pre;
+            pre = tmp;
+        }
+        
+        if(end == null){//even numbers
+            while(middle!=null && pre!=null){
+                if(middle.val != pre.val) return false;
+                middle = middle.next;
+                pre = pre.next;
+            }
+        }else{//odd numbers
+            middle = middle.next;
+            while(middle!=null && pre!=null){
+                if(middle.val != pre.val) return false;
+                middle = middle.next;
+                pre = pre.next;
+            }
+        }
+        return true;
+    }
+}

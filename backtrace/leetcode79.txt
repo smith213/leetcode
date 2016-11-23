@@ -1,0 +1,39 @@
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+For example,
+Given board =
+
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+word = "ABCCED", -> returns true,
+word = "SEE", -> returns true,
+word = "ABCB", -> returns false.
+
+public class Solution {
+    public boolean exist(char[][] board, String word) {
+        int height = board.length;
+        if(height == 0) return word==null||word=="";
+        int length = board[0].length;
+        if(length == 0) return word==null||word=="";
+        boolean[][] selected = new boolean[height][length];
+        for(int i = 0;i < height;i++){
+            for(int j = 0;j < length;j++){
+                if(find(i,j,board,word,0,selected)) return true;
+            }
+        }
+        return false;
+    }
+    boolean find(int hIndex,int vIndex,char[][] board,String word,int index,boolean[][] selected){
+        if(index == word.length()) return true;
+        if(hIndex < 0||vIndex < 0||hIndex >= board.length||vIndex >= board[0].length||board[hIndex][vIndex] != word.charAt(index)||selected[hIndex][vIndex]) return false;
+        selected[hIndex][vIndex] = true;
+        boolean exist = find(hIndex-1,vIndex,board,word,index+1,selected)||find(hIndex,vIndex-1,board,word,index+1,selected)||find(hIndex+1,vIndex,board,word,index+1,selected)||find(hIndex,vIndex+1,board,word,index+1,selected);
+        selected[hIndex][vIndex] = false;
+        return exist;
+    }
+}
